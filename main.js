@@ -1,7 +1,5 @@
 var didris = (function() {
 
-    let app = null;
-
     let block = null;
 
     let position = {
@@ -9,10 +7,30 @@ var didris = (function() {
         y: 0
     };
 
+    function start() {
+        console.log("Started!");
+        init();
+    }
+
     function init() {
         initView();
+        initPlayground();
         initSprites();
         initControls();
+    }
+
+    function initView() {
+        globals.app = new PIXI.Application({
+            width: constants.VIEW_WIDTH,
+            height: constants.VIEW_HEIGHT,
+            antialias: true
+        });
+        
+        document.body.appendChild(globals.app.view);
+    }
+
+    function initPlayground() {
+        playground.init();
     }
 
     function initControls() {
@@ -42,32 +60,20 @@ var didris = (function() {
         PIXI.loader
             .add(constants.BLOCK_IMAGE)
             .load(() => {
+                let graphics = new PIXI.Graphics();
+                graphics.Application
                 block = new PIXI.Sprite(PIXI.loader.resources[constants.BLOCK_IMAGE].texture);
-                app.stage.addChild(block);
+                globals.app.stage.addChild(block);
+                updateBlock();
             });
     }
 
     function updateBlock() {
-        block.position.set(position.x * constants.BLOCK_SIZE, position.y * constants.BLOCK_SIZE);
-    }
-
-    function initView() {
-        app = new PIXI.Application({
-            width: 800,
-            height: 600,
-            antialias: true
-        });
-        
-        document.body.appendChild(app.view);
-    }
-    
-    function start() {
-        console.log("Started!");
-
-        init();
+        block.position.set(position.x * constants.BLOCK_SIZE + playground.getLeft(),
+            position.y * constants.BLOCK_SIZE + playground.getTop());
     }
 
     return {
         start
     };
-}());
+})();
