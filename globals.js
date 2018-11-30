@@ -1,3 +1,4 @@
+/* exported globals */
 var globals = {
-      app: null
+    app: null
 };

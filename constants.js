@@ -1,3 +1,4 @@
+/* exported constants */
 var constants = {
     VIEW_WIDTH: 800,
     VIEW_HEIGHT: 600,
@@ -5,7 +6,7 @@ var constants = {
     BLOCK_SIZE: 16,
     PLAYGROUND_HEIGHT: 20,
     PLAYGROUND_WIDTH: 10,
-    PLAYGROUND_BORDER: 2,
+    PLAYGROUND_BORDER_WIDTH: 2,
     PLAYGROUND_BORDER_COLOR: 0x0088FF,
     KEY_UP: 38,
     KEY_DOWN: 40,

@@ -1,3 +1,4 @@
+/* exported didris */
 var didris = (function() {
 
     let block = null;
@@ -8,6 +9,7 @@ var didris = (function() {
     };
 
     function start() {
+        // eslint-disable-next-line no-console
         console.log("Started!");
         init();
     }
@@ -39,38 +41,30 @@ var didris = (function() {
 
     function onKeyPress(event) {
         switch (event.keyCode) {
-            case constants.KEY_RIGHT:
-                position.x++;
-                break;
-            case constants.KEY_LEFT:
-                position.x--;
-                break;
-            case constants.KEY_UP:
-                position.y--;
-                break;
-            case constants.KEY_DOWN:
-                position.y++;
-                break;
+        case constants.KEY_RIGHT:
+            position.x++;
+            break;
+        case constants.KEY_LEFT:
+            position.x--;
+            break;
+        case constants.KEY_UP:
+            position.y--;
+            break;
+        case constants.KEY_DOWN:
+            position.y++;
+            break;
         }
 
         updateBlock();
     }
 
     function initSprites() {
-        PIXI.loader
-            .add(constants.BLOCK_IMAGE)
-            .load(() => {
-                let graphics = new PIXI.Graphics();
-                graphics.Application
-                block = new PIXI.Sprite(PIXI.loader.resources[constants.BLOCK_IMAGE].texture);
-                globals.app.stage.addChild(block);
-                updateBlock();
-            });
+        block = blocks.createNew();
+        block.redraw();
     }
 
     function updateBlock() {
-        block.position.set(position.x * constants.BLOCK_SIZE + playground.getLeft(),
-            position.y * constants.BLOCK_SIZE + playground.getTop());
+        block.setPositionAndRedraw(position.x, position.y);
     }
 
     return {

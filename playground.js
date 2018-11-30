@@ -1,3 +1,4 @@
+/* exported playground */
 var playground = (function () {
     
     let left = 0;
@@ -5,11 +6,11 @@ var playground = (function () {
 
     function init() {
         let graphics = new PIXI.Graphics();
-        graphics.lineStyle(constants.PLAYGROUND_BORDER, constants.PLAYGROUND_BORDER_COLOR, 1);
+        graphics.lineStyle(constants.PLAYGROUND_BORDER_WIDTH, constants.PLAYGROUND_BORDER_COLOR, 1);
         left = (constants.VIEW_WIDTH - getWidth()) / 2;
         top = (constants.VIEW_HEIGHT - getHeight()) / 2;
-        graphics.drawRect(left - constants.PLAYGROUND_BORDER, top - constants.PLAYGROUND_BORDER,
-            getWidth() + 2 * constants.PLAYGROUND_BORDER, getHeight() + 2 * constants.PLAYGROUND_BORDER);
+        graphics.drawRect(left - constants.PLAYGROUND_BORDER_WIDTH, top - constants.PLAYGROUND_BORDER_WIDTH,
+            getWidth() + 2 * constants.PLAYGROUND_BORDER_WIDTH, getHeight() + 2 * constants.PLAYGROUND_BORDER_WIDTH);
 
         globals.app.stage.addChild(graphics);
     }
@@ -34,5 +35,5 @@ var playground = (function () {
         init,
         getLeft,
         getTop,
-    }
+    };
 })();
