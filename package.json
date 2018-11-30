@@ -1,0 +1,26 @@
+{
+  "name": "didris-web",
+  "version": "0.1.0",
+  "description": "DIDRIS Web Edition",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/didi-moritz/didris-web.git"
+  },
+  "keywords": [
+    "DIDRIS",
+    "Pixi.js"
+  ],
+  "author": "Dietmar Moritz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/didi-moritz/didris-web/issues"
+  },
+  "homepage": "https://github.com/didi-moritz/didris-web#readme",
+  "devDependencies": {
+    "eslint": "^5.9.0"
+  }
+}
