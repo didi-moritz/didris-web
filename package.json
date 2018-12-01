@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/didi-moritz/didris-web#readme",
   "devDependencies": {
+    "@types/pixi.js": "^4.8.4",
     "eslint": "^5.9.0"
   }
 }

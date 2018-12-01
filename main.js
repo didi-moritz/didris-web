@@ -1,12 +1,7 @@
 /* exported didris */
 var didris = (function() {
 
-    let block = null;
-
-    let position = {
-        x: 0,
-        y: 0
-    };
+    let stone = null;
 
     function start() {
         // eslint-disable-next-line no-console
@@ -17,8 +12,9 @@ var didris = (function() {
     function init() {
         initView();
         initPlayground();
-        initSprites();
         initControls();
+        testStone();
+        engine.start();
     }
 
     function initView() {
@@ -42,32 +38,35 @@ var didris = (function() {
     function onKeyPress(event) {
         switch (event.keyCode) {
         case constants.KEY_RIGHT:
-            position.x++;
+            globals.x++;
             break;
         case constants.KEY_LEFT:
-            position.x--;
+            globals.x--;
             break;
         case constants.KEY_UP:
-            position.y--;
+            globals.y--;
             break;
         case constants.KEY_DOWN:
-            position.y++;
+            globals.y++;
+            break;
+        case 27:
+            engine.stop();
             break;
         }
 
-        updateBlock();
+        updateStone();
     }
 
-    function initSprites() {
-        block = blocks.createNew();
-        block.redraw();
+    function testStone() {
+        stone = stoneFactory.createNew(1);
     }
 
-    function updateBlock() {
-        block.setPositionAndRedraw(position.x, position.y);
+    function updateStone() {
+        stone.moveTo(globals.x, globals.y);
     }
 
     return {
-        start
+        start,
+        updateStone
     };
 })();

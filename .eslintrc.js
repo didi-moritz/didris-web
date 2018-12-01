@@ -8,8 +8,11 @@ module.exports = {
         "didris": false,
         "globals": false,
         "constants": false,
+        "engine": false,
         "playground": false,
-        "blocks": false,
+        "blockFactory": false,
+        "stoneTypes": false,
+        "stoneFactory": false,
     },
     "extends": "eslint:recommended",
     "parserOptions": {
