@@ -16,7 +16,7 @@ var stoneFactory = (function () {
         init();
 
         function convertTypeBlock(block) {
-            blocks.push(blockFactory.createNew(block.x, block.y));
+            blocks.push(blockFactory.createNew(block.x, block.y, color));
         }
 
         function updateFlipOrRotateMode(block) {
