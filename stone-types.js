@@ -1,65 +1,69 @@
 /* eslint-disable no-console */
 /* exported stoneTypes */
-var data = `
-0x00FF00
- XX
-X/
-###
-0x00FFFF
-XOX
- X
-###
-0xFF0000
-X/XX
-`;
+var data = [
+    ["▄█▀ ", " ▄", "F", "0x00FF00"],
+    ["▀█▀ ", " ▀", "R", "0x00FFFF"],
+    ["▀▀▀▀", " ▀", "F", "0xFF0000"]
+];
 
 var stoneTypes = (function() {
     let types = [];
 
-    function getType(i) { 
-        return types[i];
+    function getType(name) {
+        return types[name];
+    }
+
+    function getRandomType() {
+        let keys = Object.keys(types);
+        let key = keys[Math.floor(Math.random() * keys.length)];
+        return getType(key);
     }
 
     function readData() {
-        console.log("reading data...");
-        let definitions = data.split("###");
-        console.log("found " + definitions.length + " defs");
-        definitions.forEach(parseDefinition);
+        data.forEach(parseDefinition);
     }
     readData();
 
-    function parseDefinition(definitionLines) {
-        let lines = definitionLines.trim().split("\n");
-        let color = lines[0].trim();
-        let blocks = parsePattern(lines.slice(1));
+    function parseDefinition(definition) {
+        console.log(definition);
+        let name = definition[0].trim();
+        let color = definition[3];
+        let blocks = parsePattern(name);
+        let pivotBlockNumber = parsePatternOfPivotBlock(definition[1], blocks);
+        let flip = definition[2] == "F";
 
-        console.log("=> " + blocks);
-        console.log(blocks);
-        types.push({
+        types[name] = {
+            name,
             color,
-            blocks
-        });
+            blocks,
+            pivotBlockNumber,
+            flip
+        };
     }
 
-    function parsePattern(patterLines) {
-        console.log("patternLines: " + patterLines);
+    function parsePattern(pattern) {
         let blocks = [];
-        for (let y = 0; y < patterLines.length; y++) {
-            let line = patterLines[y];
-            for (let x = 0; x < line.length; x++) {
-                if (line.charAt(x) == "X") {
-                    blocks.push({ x, y, rotate: false, flip: false });
-                } else if (line.charAt(x) == "O") {
-                    blocks.push({ x, y, rotate: true, flip: false });
-                } else if (line.charAt(x) == "/") {
-                    blocks.push({ x, y, rotate: false, flip: true });
-                }
+        for (let x = 0; x < pattern.length; x++) {
+            let c = pattern[x];
+            
+            if (c == "▀" || c == "█") {
+                blocks.push({ x, y: 0});
+            }
+            
+            if (c == "▄" || c == "█") {
+                blocks.push({ x, y: 1});
             }
         }
+
         return blocks;
     }
 
+    function parsePatternOfPivotBlock(pattern, blocks) {
+
+    }
+
     return {
-        getType
+        getType,
+        getRandomType
     };
 })();

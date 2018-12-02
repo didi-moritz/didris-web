@@ -7,22 +7,16 @@ var stoneFactory = (function () {
         let flip = true;
 
         function init() {
-            let stoneType = stoneTypes.getType(type);
+            let stoneType = stoneTypes.getRandomType();
 
             color = stoneType.color;
             stoneType.blocks.forEach(convertTypeBlock);
-            stoneType.blocks.forEach(updateFlipOrRotateMode);
+            flip = stoneType.flip;
         }
         init();
 
         function convertTypeBlock(block) {
             blocks.push(blockFactory.createNew(block.x, block.y, color));
-        }
-
-        function updateFlipOrRotateMode(block) {
-            if (block.rotate) {
-                flip = false;
-            }
         }
 
         function moveTo(offsetX, offsetY) {

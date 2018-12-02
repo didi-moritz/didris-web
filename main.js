@@ -58,7 +58,7 @@ var didris = (function() {
     }
 
     function testStone() {
-        stone = stoneFactory.createNew(1);
+        stone = stoneFactory.createNew();
     }
 
     function updateStone() {
