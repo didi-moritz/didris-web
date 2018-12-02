@@ -38,16 +38,16 @@ var didris = (function() {
     function onKeyPress(event) {
         switch (event.keyCode) {
         case constants.KEY_RIGHT:
-            globals.x++;
+            moveCurrentStone(1, 0);
             break;
         case constants.KEY_LEFT:
-            globals.x--;
+            moveCurrentStone(-1, 0);
             break;
         case constants.KEY_UP:
-            globals.y--;
+            moveCurrentStone(0, -1);
             break;
         case constants.KEY_DOWN:
-            globals.y++;
+            moveCurrentStone(0, 1);
             break;
         case 27:
             engine.stop();
@@ -65,8 +65,18 @@ var didris = (function() {
         stone.moveTo(globals.x, globals.y);
     }
 
+    function moveCurrentStone(x, y) {
+        if (stone.isMoveToPossible(globals.x + x, globals.y + y)) {
+            globals.x += x;
+            globals.y += y;
+
+            stone.moveTo(globals.x, globals.y);
+        }
+    }
+
     return {
         start,
-        updateStone
+        updateStone,
+        moveCurrentStone
     };
 })();

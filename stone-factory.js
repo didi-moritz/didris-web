@@ -29,8 +29,13 @@ var stoneFactory = (function () {
             blocks.forEach(block => block.moveTo(offsetX, offsetY));
         }
 
+        function isMoveToPossible(x, y) {
+            return blocks.every(block => block.isMoveToPossible(x, y));
+        }
+
         return {
-            moveTo
+            moveTo,
+            isMoveToPossible
         };
     }
 

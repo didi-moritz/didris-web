@@ -28,8 +28,29 @@ var blockFactory = (function () {
             return playground.getTop() + (y + offsetY) * constants.BLOCK_SIZE;
         }
 
+        function isMoveToPossible(offsetX, offsetY) {
+            if (offsetX + x < 0) {
+                return false;
+            }
+
+            if (offsetX + x >= constants.PLAYGROUND_WIDTH) {
+                return false;
+            }
+
+            if (offsetY + y < 0) {
+                return false;
+            }
+
+            if (offsetY + y >= constants.PLAYGROUND_HEIGHT) {
+                return false;
+            }
+
+            return true;
+        }
+
         return {
-            moveTo
+            moveTo,
+            isMoveToPossible
         };
     }
 

@@ -27,7 +27,7 @@ var engine = (function () {
     }
 
     function checkPositionAndFallOneStepDown() {
-        globals.y++;
+        didris.moveCurrentStone(0, 1);
     }
 
     function updateStone() {
