@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 /* exported stoneTypes */
-var data = [
-    ["▄█▀ ", " ▄", "F", "0x00FF00"],
-    ["▀█▀ ", " ▀", "R", "0x00FFFF"],
-    ["▀▀▀▀", " ▀", "F", "0xFF0000"]
-];
-
 var stoneTypes = (function() {
-    let types = [];
+    const data = [
+        ["▄█▀ ", " ▄", "F", "0x00FF00"],
+        ["▀█▀ ", " ▀", "R", "0x00FFFF"],
+        ["▀▀▀▀", " ▀", "F", "0xFF0000"]
+    ];
+
+    const types = [];
 
     function getType(name) {
         return types[name];
