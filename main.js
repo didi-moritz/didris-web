@@ -9,11 +9,14 @@ var didris = (function() {
         init();
     }
 
+    function isCurrentStoneAvailabe() {
+        return stone != null;
+    }
+
     function init() {
         initView();
         initPlayground();
         initControls();
-        testStone();
         engine.start();
     }
 
@@ -38,16 +41,16 @@ var didris = (function() {
     function onKeyPress(event) {
         switch (event.keyCode) {
         case constants.KEY_RIGHT:
-            moveCurrentStone(1, 0);
+            moveCurrentStoneIfPossible(1, 0);
             break;
         case constants.KEY_LEFT:
-            moveCurrentStone(-1, 0);
+            moveCurrentStoneIfPossible(-1, 0);
             break;
         case constants.KEY_UP:
-            moveCurrentStone(0, -1);
+            moveCurrentStoneIfPossible(0, -1);
             break;
         case constants.KEY_DOWN:
-            moveCurrentStone(0, 1);
+            moveCurrentStoneOneStepDownOrCreateNewStone();
             break;
         case 27:
             engine.stop();
@@ -57,26 +60,55 @@ var didris = (function() {
         updateStone();
     }
 
-    function testStone() {
+    function haveNewStone() {
         stone = stoneFactory.createNew();
+        globals.x = 0;
+        globals.y = 0;
+        updateStone();
     }
 
     function updateStone() {
         stone.moveTo(globals.x, globals.y);
     }
 
-    function moveCurrentStone(x, y) {
-        if (stone.isMoveToPossible(globals.x + x, globals.y + y)) {
-            globals.x += x;
-            globals.y += y;
+    function moveCurrentStoneIfPossible(x, y) {
+        if (isCurrentStoneMoveable(x, y)) {
+            moveCurrentStone(x, y);
+        }
 
-            stone.moveTo(globals.x, globals.y);
+        return false;
+    }
+
+    function isCurrentStoneMoveable(x, y) {
+        return stone.isMoveToPossible(globals.x + x, globals.y + y);
+    }
+
+    function moveCurrentStone(x, y) {
+        globals.x += x;
+        globals.y += y;
+
+        stone.moveTo(globals.x, globals.y);
+    }
+
+    function isCurrentStoneAlreadyAtBottom() {
+        return !isCurrentStoneMoveable(0, 1);
+    }
+
+    function moveCurrentStoneOneStepDownOrCreateNewStone() {
+        if (isCurrentStoneAlreadyAtBottom()) {
+            haveNewStone();
+        } else {
+            moveCurrentStoneIfPossible(0, 1);
         }
     }
 
     return {
         start,
+        isCurrentStoneAvailabe,
+        haveNewStone,
         updateStone,
-        moveCurrentStone
+        moveCurrentStoneOneStepDownOrCreateNewStone,
+        moveCurrentStoneIfPossible,
+        isCurrentStoneAlreadyAtBottom
     };
 })();

@@ -20,18 +20,13 @@ var engine = (function () {
             return;
         }
 
-        checkPositionAndFallOneStepDown();
-        updateStone();
+        if (!didris.isCurrentStoneAvailabe()) {
+            didris.haveNewStone();
+        }
+
+        didris.moveCurrentStoneOneStepDownOrCreateNewStone();
 
         next();
-    }
-
-    function checkPositionAndFallOneStepDown() {
-        didris.moveCurrentStone(0, 1);
-    }
-
-    function updateStone() {
-        didris.updateStone();
     }
 
     function next() {
