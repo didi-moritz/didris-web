@@ -3,7 +3,7 @@ var constants = {
     VIEW_WIDTH: 800,
     VIEW_HEIGHT: 600,
     BLOCK_IMAGE: "./img/block.png",
-    BLOCK_SIZE: 16,
+    BLOCK_SIZE: 20,
     PLAYGROUND_HEIGHT: 20,
     PLAYGROUND_WIDTH: 10,
     PLAYGROUND_BORDER_WIDTH: 2,
