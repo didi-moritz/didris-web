@@ -83,8 +83,6 @@ var didris = (function() {
     function rotateOrFlipCurrentStoneIfPossible() {
         if (stone.isRotationOrFlipPossible(globals.x, globals.y)) {
             stone.rotateOrFlip();
-        } else {
-            console.log("nope");
         }
     }
 
