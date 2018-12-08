@@ -53,6 +53,7 @@ var didris = (function() {
             moveCurrentStoneOneStepDownOrCreateNewStone();
             break;
         case 27:
+            audio.stopBackgroundBeat();
             engine.stop();
             break;
         }

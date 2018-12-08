@@ -5,10 +5,12 @@ module.exports = {
     },
     "globals": {
         "PIXI": false,
+        "Tone": false,
         "didris": false,
         "globals": false,
         "constants": false,
         "engine": false,
+        "audio": false,
         "playground": false,
         "blockFactory": false,
         "stoneTypes": false,
