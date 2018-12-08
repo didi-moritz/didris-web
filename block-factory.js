@@ -49,7 +49,15 @@ var blockFactory = (function () {
                 return false;
             }
 
+            if (playground.isBlockOccupied(offsetX + x, offsetY + y)) {
+                return false;
+            }
+
             return true;
+        }
+
+        function updateBlockStatuusOfPlayground(offsetX, offsetY) {
+            playground.setBlockOccupied(offsetX + x, offsetY + y);
         }
 
         function rotateClockwise(pivotCoords) {
@@ -101,7 +109,8 @@ var blockFactory = (function () {
             isRotateClockwisePossible,
             isRotateCounterClockwisePossible,
             rotateClockwise,
-            rotateCounterClockwise
+            rotateCounterClockwise,
+            updateBlockStatuusOfPlayground
         };
     }
 

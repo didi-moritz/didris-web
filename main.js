@@ -68,6 +68,10 @@ var didris = (function() {
         updateStone();
     }
 
+    function updateBlockStatuusOfPlayground() {
+        stone.updateBlockStatuusOfPlayground(globals.x, globals.y);
+    }
+
     function updateStone() {
         stone.moveTo(globals.x, globals.y);
     }
@@ -103,6 +107,7 @@ var didris = (function() {
 
     function moveCurrentStoneOneStepDownOrCreateNewStone() {
         if (isCurrentStoneAlreadyAtBottom()) {
+            updateBlockStatuusOfPlayground();
             haveNewStone();
         } else {
             moveCurrentStoneIfPossible(0, 1);

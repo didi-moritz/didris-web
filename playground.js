@@ -4,6 +4,8 @@ var playground = (function () {
     let left = 0;
     let top = 0;
 
+    let blockStatus = null;
+
     function init() {
         let graphics = new PIXI.Graphics();
         graphics.lineStyle(constants.PLAYGROUND_BORDER_WIDTH, constants.PLAYGROUND_BORDER_COLOR, 1);
@@ -30,10 +32,32 @@ var playground = (function () {
     function getTop() {
         return top;
     }
+
+    function setBlockOccupied(x, y) {
+        initBlockStatuusIfNecessary(x);
+        blockStatus[x][y] = 1;
+    }
+
+    function isBlockOccupied(x, y) {
+        initBlockStatuusIfNecessary(x);
+        return blockStatus[x][y] === 1;
+    }
+
+    function initBlockStatuusIfNecessary(x) {
+        if (blockStatus == null) {
+            blockStatus = [];
+        }
+
+        if (blockStatus[x] == null) {
+            blockStatus[x] = [];
+        }
+    }
  
     return {
         init,
         getLeft,
         getTop,
+        setBlockOccupied,
+        isBlockOccupied
     };
 })();

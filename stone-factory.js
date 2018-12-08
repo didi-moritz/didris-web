@@ -88,11 +88,16 @@ var stoneFactory = (function () {
                 block.isRotateCounterClockwisePossible(x, y, pivotBlock.getCoords()));
         }
 
+        function updateBlockStatuusOfPlayground(x, y) {
+            blocks.forEach(block => block.updateBlockStatuusOfPlayground(x, y));
+        }
+
         return {
             isMoveToPossible,
             moveTo,
             isRotationOrFlipPossible,
-            rotateOrFlip
+            rotateOrFlip,
+            updateBlockStatuusOfPlayground
         };
     }
 
