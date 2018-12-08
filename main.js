@@ -47,7 +47,7 @@ var didris = (function() {
             moveCurrentStoneIfPossible(-1, 0);
             break;
         case constants.KEY_UP:
-            moveCurrentStoneIfPossible(0, -1);
+            rotateOrFlipCurrentStoneIfPossible();
             break;
         case constants.KEY_DOWN:
             moveCurrentStoneOneStepDownOrCreateNewStone();
@@ -80,6 +80,14 @@ var didris = (function() {
         return false;
     }
 
+    function rotateOrFlipCurrentStoneIfPossible() {
+        if (stone.isRotationOrFlipPossible(globals.x, globals.y)) {
+            stone.rotateOrFlip();
+        } else {
+            console.log("nope");
+        }
+    }
+
     function isCurrentStoneMoveable(x, y) {
         return stone.isMoveToPossible(globals.x + x, globals.y + y);
     }
@@ -110,6 +118,6 @@ var didris = (function() {
         updateStone,
         moveCurrentStoneOneStepDownOrCreateNewStone,
         moveCurrentStoneIfPossible,
-        isCurrentStoneAlreadyAtBottom
+        isCurrentStoneAlreadyAtBottom,
     };
 })();

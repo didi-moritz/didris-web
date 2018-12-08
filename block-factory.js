@@ -8,6 +8,10 @@ var blockFactory = (function () {
 
         initGraphics();
 
+        function getCoords() {
+            return {x, y};
+        }
+
         function moveTo(offsetX, offsetY) {
             graphics.position.set(calculateLeft(offsetX), calculateTop(offsetY));
         }
@@ -48,9 +52,56 @@ var blockFactory = (function () {
             return true;
         }
 
+        function rotateClockwise(pivotCoords) {
+            let newCoords = getRotateClockwisePosition(pivotCoords);
+
+            x = newCoords.x;
+            y = newCoords.y;
+        }
+
+        function rotateCounterClockwise(pivotCoords) {
+            let newCoords = getRotateCounterClockwisePosition(pivotCoords);
+
+            x = newCoords.x;
+            y = newCoords.y;
+        }
+
+        function isRotateClockwisePossible(offsetX, offsetY, pivotCoords) {
+            let newCoords = getRotateClockwisePosition(pivotCoords);
+            return isMoveToNewRotatedCoordsPossible(offsetX, offsetY, newCoords);
+        }
+
+        function isRotateCounterClockwisePossible(offsetX, offsetY, pivotCoords) {
+            let newCoords = getRotateCounterClockwisePosition(pivotCoords);
+            return isMoveToNewRotatedCoordsPossible(offsetX, offsetY, newCoords);
+        }
+
+        function isMoveToNewRotatedCoordsPossible(offsetX, offsetY, newCoords) {
+            return isMoveToPossible(offsetX + newCoords.x - x, offsetY + newCoords.y - y);
+        }
+
+        function getRotateClockwisePosition(pivotCoords) {
+            return {
+                x: pivotCoords.x - (y - pivotCoords.y),
+                y: pivotCoords.y + (x - pivotCoords.x)
+            };
+        }
+
+        function getRotateCounterClockwisePosition(pivotCoords) {
+            return {
+                x: pivotCoords.x + (y - pivotCoords.y),
+                y: pivotCoords.y - (x - pivotCoords.x)
+            };
+        }
+
         return {
+            getCoords,
             moveTo,
-            isMoveToPossible
+            isMoveToPossible,
+            isRotateClockwisePossible,
+            isRotateCounterClockwisePossible,
+            rotateClockwise,
+            rotateCounterClockwise
         };
     }
 

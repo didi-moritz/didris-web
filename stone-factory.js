@@ -5,15 +5,21 @@ var stoneFactory = (function () {
         let blocks = [];
         let pivotBlock = null;
         let flip = true;
+        let initalFlipDirection = true;
+        let pivotClockwise = true;
 
-        function init() {
+        (function init() {
             let stoneType = stoneTypes.getRandomType();
 
             color = stoneType.color;
             stoneType.blocks.forEach(convertTypeBlock);
-            flip = stoneType.flip;
-        }
-        init();
+
+            if (stoneType.pivotBlockNumber !== null) {
+                pivotBlock = blocks[stoneType.pivotBlockNumber];
+                flip = stoneType.flip;
+                pivotClockwise = stoneType.pivotDirection === "CW";
+            }
+        })();
 
         function convertTypeBlock(block) {
             blocks.push(blockFactory.createNew(block.x, block.y, color));
@@ -27,9 +33,66 @@ var stoneFactory = (function () {
             return blocks.every(block => block.isMoveToPossible(x, y));
         }
 
+        function isRotationOrFlipPossible(x, y) {
+            if (pivotBlock == null) {
+                return false;
+            }
+
+            if (isNextRotationClockwise()) {
+                return isRotateClockwisePossible(x, y);
+            } else {
+                return isRotateCounterClockwisePossible(x, y);
+            }
+        }
+
+        function rotateOrFlip() {
+            if (isNextRotationClockwise()) {
+                rotateClockwise();
+            } else {
+                rotateCounterClockwise();
+            }
+
+            if (flip) {
+                initalFlipDirection = !initalFlipDirection;
+            }
+        }
+
+        function isNextRotationClockwise() {
+            if (flip) {
+                return ((initalFlipDirection && pivotClockwise) ||
+                    (!initalFlipDirection && !pivotClockwise));
+            } else {
+                return pivotClockwise;
+            }
+        }
+
+        function rotateClockwise() {
+            blocks.forEach(block => {
+                block.rotateClockwise(pivotBlock.getCoords());
+            });
+        }
+
+        function rotateCounterClockwise() {
+            blocks.forEach(block => {
+                block.rotateCounterClockwise(pivotBlock.getCoords());
+            });
+        }
+
+        function isRotateClockwisePossible(x, y) {
+            return blocks.every(block => 
+                block.isRotateClockwisePossible(x, y, pivotBlock.getCoords()));
+        }
+
+        function isRotateCounterClockwisePossible(x, y) {
+            return blocks.every(block =>
+                block.isRotateCounterClockwisePossible(x, y, pivotBlock.getCoords()));
+        }
+
         return {
+            isMoveToPossible,
             moveTo,
-            isMoveToPossible
+            isRotationOrFlipPossible,
+            rotateOrFlip
         };
     }
 

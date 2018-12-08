@@ -2,9 +2,13 @@
 /* exported stoneTypes */
 var stoneTypes = (function() {
     const data = [
-        ["▄█▀ ", " ▄", "F", "0x00FF00"],
-        ["▀█▀ ", " ▀", "R", "0x00FFFF"],
-        ["▀▀▀▀", " ▀", "F", "0xFF0000"]
+        ["▄█▀ ", " ▄", "F", "CCW", "0x00FF00"],
+        ["▀█▄ ", " ▄", "F", "CW", "0x00FFFF"],
+        ["█▄▄ ", " ▄", "R", "CW", "0x00FFFF"],
+        ["▄▄█ ", " ▄", "R", "CW", "0x00FFFF"],
+        ["▀█▀ ", " ▀", "R", "CW", "0x00FFFF"],
+        ["▀▀▀▀", " ▀", "F", "CW", "0xFF0000"],
+        ["██  ", null, null, null, "0xFF0000"]
     ];
 
     const types = [];
@@ -27,16 +31,22 @@ var stoneTypes = (function() {
     function parseDefinition(definition) {
         console.log(definition);
         let name = definition[0].trim();
-        let color = definition[3];
+        let color = definition[4];
         let blocks = parsePattern(name);
-        let pivotBlockNumber = parsePatternOfPivotBlock(definition[1], blocks);
-        let flip = definition[2] == "F";
+        let flip = null;
+        let pivotDirection = definition[3];
+        let pivotBlockNumber = null;
+        if (definition[2] != null) {
+            flip = definition[2] == "F";
+            pivotBlockNumber = parsePatternOfPivotBlockAndGetBlockNumber(definition[1], blocks);
+        }
 
         types[name] = {
             name,
             color,
             blocks,
             pivotBlockNumber,
+            pivotDirection,
             flip
         };
     }
@@ -58,8 +68,27 @@ var stoneTypes = (function() {
         return blocks;
     }
 
-    function parsePatternOfPivotBlock(pattern, blocks) {
+    function parsePatternOfPivotBlockAndGetBlockNumber(pattern, blocks) {
+        let coords = null;
+        for (let x = 0; pattern && x < pattern.length; x++) {
+            let c = pattern[x];
+            
+            if (c == "▀") {
+                coords = {x, y: 0};
+            }
+            
+            if (c == "▄") {
+                coords = {x, y: 1};
+            }
+        }
 
+        for (let i = 0; i < blocks.length; i++) {
+            if (blocks[i].x == coords.x && blocks[i].y == coords.y) {
+                return i;
+            }
+        }
+
+        return null;
     }
 
     return {
