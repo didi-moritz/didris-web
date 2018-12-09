@@ -9,7 +9,7 @@ var stoneFactory = (function () {
         let pivotClockwise = true;
 
         (function init() {
-            let stoneType = stoneTypes.getType(type);;
+            let stoneType = stoneTypes.getType(type);
             if (!stoneType) {
                 stoneType = stoneTypes.getRandomType();
             }
