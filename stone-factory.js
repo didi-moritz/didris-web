@@ -9,7 +9,10 @@ var stoneFactory = (function () {
         let pivotClockwise = true;
 
         (function init() {
-            let stoneType = stoneTypes.getRandomType();
+            let stoneType = stoneTypes.getType(type);;
+            if (!stoneType) {
+                stoneType = stoneTypes.getRandomType();
+            }
 
             color = stoneType.color;
             stoneType.blocks.forEach(convertTypeBlock);
