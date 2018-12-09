@@ -1,13 +1,13 @@
 /* exported stoneTypes */
 var stoneTypes = (function() {
     const data = [
-        ["▄█▀ ", " ▄", "F", "CCW", "0x00FF00"],
-        ["▀█▄ ", " ▄", "F", "CW", "0x00FFFF"],
-        ["█▄▄ ", " ▄", "R", "CW", "0x00FFFF"],
-        ["▄▄█ ", " ▄", "R", "CW", "0x00FFFF"],
-        ["▀█▀ ", " ▀", "R", "CW", "0x00FFFF"],
-        ["▀▀▀▀", " ▀", "F", "CW", "0xFF0000"],
-        ["██  ", null, null, null, "0xFF0000"]
+        ["▄█▀ ", " ▄", "F", "CCW", "0xA5D6A7"],
+        ["▀█▄ ", " ▄", "F", "CW", "0xFF8A65"],
+        ["█▄▄ ", " ▄", "R", "CW", "0x42A5F5"],
+        ["▄▄█ ", " ▄", "R", "CW", "0xF06292"],
+        ["▀█▀ ", " ▀", "R", "CW", "0xFFEB3B"],
+        ["▀▀▀▀", " ▀", "F", "CW", "0x7E57C2"],
+        ["██  ", null, null, null, "0x4DB6AC"]
     ];
 
     const types = [];

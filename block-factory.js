@@ -1,7 +1,7 @@
 /* exported blockFactory */
 var blockFactory = (function () {
     const BORDER_WIDTH = 2;
-    const BORDER_COLOR = 0x668833;
+    const BORDER_COLOR = 0x000000;
     
     function createNew(startX, startY, color) {
         let graphics = new PIXI.Graphics(); 
