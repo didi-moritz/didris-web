@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* exported stoneTypes */
 var stoneTypes = (function() {
     const data = [
@@ -29,7 +28,6 @@ var stoneTypes = (function() {
     readData();
 
     function parseDefinition(definition) {
-        console.log(definition);
         let name = definition[0].trim();
         let color = definition[4];
         let blocks = parsePattern(name);
