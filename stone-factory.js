@@ -91,8 +91,8 @@ var stoneFactory = (function () {
                 block.isRotateCounterClockwisePossible(x, y, pivotBlock.getCoords()));
         }
 
-        function updateBlockStatuusOfPlayground(x, y) {
-            blocks.forEach(block => block.updateBlockStatuusOfPlayground(x, y));
+        function updateBlocksOfPlayground(x, y) {
+            blocks.forEach(block => block.updateBlocksOfPlayground(x, y));
         }
 
         return {
@@ -100,7 +100,7 @@ var stoneFactory = (function () {
             moveTo,
             isRotationOrFlipPossible,
             rotateOrFlip,
-            updateBlockStatuusOfPlayground
+            updateBlocksOfPlayground
         };
     }
 

@@ -3,10 +3,13 @@ var blockFactory = (function () {
     const BORDER_WIDTH = 2;
     const BORDER_COLOR = 0x668833;
     
-    function createNew(x, y, color) {
-        const graphics = new PIXI.Graphics(); 
+    function createNew(startX, startY, color) {
+        let graphics = new PIXI.Graphics(); 
 
         initGraphics();
+
+        let x = startX;
+        let y = startY;
 
         function getCoords() {
             return {x, y};
@@ -16,12 +19,24 @@ var blockFactory = (function () {
             graphics.position.set(calculateLeft(offsetX), calculateTop(offsetY));
         }
 
+        function moveToAbsolute(newX, newY) {
+            x = newX;
+            y = newY;
+            moveTo(0, 0);
+        }
+
         function initGraphics() {
             graphics.lineStyle(BORDER_WIDTH, BORDER_COLOR, 1);
             graphics.beginFill(color);
             graphics.drawRect(0, 0, constants.BLOCK_SIZE, constants.BLOCK_SIZE);
 
             globals.app.stage.addChild(graphics);
+        }
+        
+        function removeAndDelete() {
+            globals.app.stage.removeChild(graphics);
+            graphics.destroy();
+            graphics = undefined;
         }
 
         function calculateLeft(offsetX) {
@@ -56,8 +71,8 @@ var blockFactory = (function () {
             return true;
         }
 
-        function updateBlockStatuusOfPlayground(offsetX, offsetY) {
-            playground.setBlockOccupied(offsetX + x, offsetY + y);
+        function updateBlocksOfPlayground(offsetX, offsetY) {
+            playground.addBlock(offsetX + x, offsetY + y, this);
         }
 
         function rotateClockwise(pivotCoords) {
@@ -104,13 +119,15 @@ var blockFactory = (function () {
 
         return {
             getCoords,
+            removeAndDelete,
             moveTo,
+            moveToAbsolute,
             isMoveToPossible,
             isRotateClockwisePossible,
             isRotateCounterClockwisePossible,
             rotateClockwise,
             rotateCounterClockwise,
-            updateBlockStatuusOfPlayground
+            updateBlocksOfPlayground
         };
     }
 

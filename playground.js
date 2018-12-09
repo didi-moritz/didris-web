@@ -4,7 +4,7 @@ var playground = (function () {
     let left = 0;
     let top = 0;
 
-    let blockStatus = null;
+    let blocks = null;
 
     function init() {
         let graphics = new PIXI.Graphics();
@@ -33,31 +33,80 @@ var playground = (function () {
         return top;
     }
 
-    function setBlockOccupied(x, y) {
-        initBlockStatuusIfNecessary(x);
-        blockStatus[x][y] = 1;
+    function addBlock(x, y, block) {
+        initBlocksArrayIfNecessary(x);
+        blocks[x][y] = block;
     }
 
     function isBlockOccupied(x, y) {
-        initBlockStatuusIfNecessary(x);
-        return blockStatus[x][y] === 1;
+        return getBlock(x, y) !== undefined;
     }
 
-    function initBlockStatuusIfNecessary(x) {
-        if (blockStatus == null) {
-            blockStatus = [];
+    function initBlocksArrayIfNecessary(x) {
+        if (!blocks) {
+            blocks = [];
         }
 
-        if (blockStatus[x] == null) {
-            blockStatus[x] = [];
+        if (!blocks[x]) {
+            blocks[x] = [];
         }
     }
- 
+
+    function checkAndRemoveFullLines() {
+        let lines = getFullLinesFromTopToBottom();
+        lines.forEach(y => clearLine(y));
+    }
+
+    function clearLine(y) {
+        getBlocksOfLine(y).forEach(block => block.removeAndDelete());
+        while(y >= 0) {
+            for (let x = 0; x < constants.PLAYGROUND_WIDTH; x++) {
+                let block = getBlock(x, y - 1);
+                addBlock(x, y, block);
+                if (block) {
+                    block.moveToAbsolute(x, y);
+                }
+            }
+            y--;
+        }
+    }
+
+    function getFullLinesFromTopToBottom() {
+        const lines = [];
+        for (let y = 0; y < constants.PLAYGROUND_HEIGHT; y++) {
+            if (getBlocksOfLine(y).length == constants.PLAYGROUND_WIDTH) {
+                lines.push(y);
+            }
+        }
+
+        return lines;
+    }
+
+    function getBlocksOfLine(y) {
+        let result = [];
+        for (let x = 0; x < constants.PLAYGROUND_WIDTH; x++) {
+            let block = getBlock(x, y);
+            if (block) {
+                result.push(block);
+            }
+        }
+        return result;
+    }
+
+    function getBlock(x, y) {
+        if (!blocks || !blocks[x]) {
+            return undefined;
+        }
+
+        return blocks[x][y];
+    }
+
     return {
         init,
         getLeft,
         getTop,
-        setBlockOccupied,
-        isBlockOccupied
+        addBlock,
+        isBlockOccupied,
+        checkAndRemoveFullLines        
     };
 })();

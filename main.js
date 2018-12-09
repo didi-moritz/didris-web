@@ -68,8 +68,12 @@ var didris = (function() {
         updateStone();
     }
 
-    function updateBlockStatuusOfPlayground() {
-        stone.updateBlockStatuusOfPlayground(globals.x, globals.y);
+    function updateBlocksOfPlayground() {
+        stone.updateBlocksOfPlayground(globals.x, globals.y);
+    }
+
+    function checkAndRemoveFullLines() {
+        playground.checkAndRemoveFullLines();
     }
 
     function updateStone() {
@@ -107,7 +111,8 @@ var didris = (function() {
 
     function moveCurrentStoneOneStepDownOrCreateNewStone() {
         if (isCurrentStoneAlreadyAtBottom()) {
-            updateBlockStatuusOfPlayground();
+            updateBlocksOfPlayground();
+            checkAndRemoveFullLines();
             haveNewStone();
         } else {
             moveCurrentStoneIfPossible(0, 1);
