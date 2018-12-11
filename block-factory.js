@@ -56,10 +56,6 @@ var blockFactory = (function () {
                 return false;
             }
 
-            if (offsetY + y < 0) {
-                return false;
-            }
-
             if (offsetY + y >= constants.PLAYGROUND_HEIGHT) {
                 return false;
             }
