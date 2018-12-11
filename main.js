@@ -56,6 +56,12 @@ var didris = (function() {
             audio.stopBackgroundBeat();
             engine.stop();
             break;
+        case 32:
+            engine.fallDown();
+            break;
+        default:
+            // eslint-disable-next-line no-console
+            console.log(`keycode: ${event.keyCode}`);
         }
 
         updateStone();
@@ -109,13 +115,17 @@ var didris = (function() {
         return !isCurrentStoneMoveable(0, 1);
     }
 
+    function moveCurrentStoneOneStepDown() {
+        moveCurrentStoneIfPossible(0, 1);
+    }
+
     function moveCurrentStoneOneStepDownOrCreateNewStone() {
         if (isCurrentStoneAlreadyAtBottom()) {
             updateBlocksOfPlayground();
             checkAndRemoveFullLines();
             haveNewStone();
         } else {
-            moveCurrentStoneIfPossible(0, 1);
+            moveCurrentStoneOneStepDown();
         }
     }
 
@@ -124,6 +134,7 @@ var didris = (function() {
         isCurrentStoneAvailabe,
         haveNewStone,
         updateStone,
+        moveCurrentStoneOneStepDown,
         moveCurrentStoneOneStepDownOrCreateNewStone,
         moveCurrentStoneIfPossible,
         isCurrentStoneAlreadyAtBottom,

@@ -3,6 +3,8 @@ var engine = (function () {
 
     let running = false;
     let speedInMs = 1000;
+    let runningFallDown = false;
+    let fallDownSpeedInMs = 10;
     let currentTimeout = null;
     
     function start() {
@@ -32,10 +34,45 @@ var engine = (function () {
     function next() {
         currentTimeout = setTimeout(run, speedInMs);
     }
+    
+    function fallDown() {
+        stop();
+        runningFallDown = true;
+        runFallDown();
+    }
+
+    function stopFallDown() {
+        if (!runningFallDown) {
+            return;
+        }
+
+        runningFallDown = false;
+        clearTimeout(currentTimeout);
+        start();
+    }
+
+    function runFallDown() {
+        if (!runningFallDown) {
+            return;
+        }
+
+        didris.moveCurrentStoneOneStepDown();
+
+        if (didris.isCurrentStoneAlreadyAtBottom()) {
+            stopFallDown();
+        } else {
+            nextFallDown();
+        }
+    }
+
+    function nextFallDown() {
+        currentTimeout = setTimeout(runFallDown, fallDownSpeedInMs);
+    }
 
     return {
         run,
         start,
-        stop
+        stop,
+        fallDown
     };
 })();
