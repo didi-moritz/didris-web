@@ -80,9 +80,13 @@ var didris = (function() {
     function haveNewStone() {
         stone = stoneFactory.createNew();
         resetStoneDrop();
-        globals.x = 0;
-        globals.y = 0;
+        resetCurrentPosition();
         updateStone();
+    }
+    
+    function resetCurrentPosition() {
+        globals.x = Math.floor((constants.PLAYGROUND_WIDTH - 1) / 2) - 1;
+        globals.y = 0;
     }
 
     function updateBlocksOfPlayground() {

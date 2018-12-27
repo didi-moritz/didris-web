@@ -24,10 +24,10 @@ var engine = (function () {
 
         if (!didris.isCurrentStoneAvailabe()) {
             didris.haveNewStone();
+        } else {
+            didris.moveCurrentStoneOneStepDownOrCreateNewStone();
         }
-
-        didris.moveCurrentStoneOneStepDownOrCreateNewStone();
-
+        
         next();
     }
 
