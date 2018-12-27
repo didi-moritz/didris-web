@@ -57,6 +57,7 @@ var engine = (function () {
         }
 
         didris.moveCurrentStoneOneStepDown();
+        didris.increaseStoneDrop();
 
         if (didris.isCurrentStoneAlreadyAtBottom()) {
             stopFallDown();

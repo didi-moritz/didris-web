@@ -52,8 +52,7 @@ var playground = (function () {
         }
     }
 
-    function checkAndRemoveFullLines() {
-        let lines = getFullLinesFromTopToBottom();
+    function clearLines(lines) {
         lines.forEach(y => clearLine(y));
     }
 
@@ -71,7 +70,7 @@ var playground = (function () {
         }
     }
 
-    function getFullLinesFromTopToBottom() {
+    function getFullLines() {
         const lines = [];
         for (let y = 0; y < constants.PLAYGROUND_HEIGHT; y++) {
             if (getBlocksOfLine(y).length == constants.PLAYGROUND_WIDTH) {
@@ -107,6 +106,7 @@ var playground = (function () {
         getTop,
         addBlock,
         isBlockOccupied,
-        checkAndRemoveFullLines        
+        getFullLines,
+        clearLines
     };
 })();

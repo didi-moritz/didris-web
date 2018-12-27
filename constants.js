@@ -11,5 +11,17 @@ var constants = {
     KEY_UP: 38,
     KEY_DOWN: 40,
     KEY_LEFT: 37,
-    KEY_RIGHT: 39
+    KEY_RIGHT: 39,
+    LINES_SCORE_BASE: {
+        1: 40,
+        2: 100,
+        3: 300,
+        4: 1200
+    },
+    scoreFontStyle: new PIXI.TextStyle({
+        fontFamily: "monospace",
+        fontSize: 24,
+        fontWeight: "bold",
+        fill: "#81B1B1",
+    })
 };

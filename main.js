@@ -2,6 +2,8 @@
 var didris = (function() {
 
     let stone = null;
+    let stoneDrop = 0;
+    let scoreText = null;
 
     function start() {
         // eslint-disable-next-line no-console
@@ -17,6 +19,7 @@ var didris = (function() {
         initView();
         initPlayground();
         initControls();
+        initScoreText();
         engine.start();
     }
 
@@ -32,6 +35,13 @@ var didris = (function() {
 
     function initPlayground() {
         playground.init();
+    }
+
+    function initScoreText() {
+        scoreText = new PIXI.Text("Score: 0", constants.scoreFontStyle);
+        scoreText.x = 20;
+        scoreText.y = 20;
+        globals.app.stage.addChild(scoreText);
     }
 
     function initControls() {
@@ -69,6 +79,7 @@ var didris = (function() {
 
     function haveNewStone() {
         stone = stoneFactory.createNew();
+        resetStoneDrop();
         globals.x = 0;
         globals.y = 0;
         updateStone();
@@ -79,7 +90,14 @@ var didris = (function() {
     }
 
     function checkAndRemoveFullLines() {
-        playground.checkAndRemoveFullLines();
+        const lines = playground.getFullLines();
+        if (lines.length > 0) {
+            const linePoints = constants.LINES_SCORE_BASE[lines.length] * (globals.level + 1);
+            globals.points += linePoints + stoneDrop;
+            playground.clearLines(lines);
+            updateScore();
+            console.log(globals.points);
+        }
     }
 
     function updateStone() {
@@ -129,6 +147,18 @@ var didris = (function() {
         }
     }
 
+    function increaseStoneDrop() {
+        stoneDrop += 1;
+    }
+
+    function resetStoneDrop() {
+        stoneDrop = 0;
+    }
+
+    function updateScore() {
+        scoreText.text = "Score: " + globals.points;
+    }
+
     return {
         start,
         isCurrentStoneAvailabe,
@@ -138,5 +168,6 @@ var didris = (function() {
         moveCurrentStoneOneStepDownOrCreateNewStone,
         moveCurrentStoneIfPossible,
         isCurrentStoneAlreadyAtBottom,
+        increaseStoneDrop,
     };
 })();
