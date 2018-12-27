@@ -23,5 +23,8 @@ var constants = {
         fontSize: 24,
         fontWeight: "bold",
         fill: "#81B1B1",
+        dropShadow: true,
+        dropShadowColor: "#006666",
+        dropShadowDistance: 3
     })
 };
