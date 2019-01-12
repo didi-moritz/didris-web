@@ -100,7 +100,6 @@ var didris = (function() {
             globals.points += linePoints + stoneDrop;
             playground.clearLines(lines);
             updateScore();
-            console.log(globals.points);
         }
     }
 
