@@ -29,8 +29,17 @@ var didris = (function() {
             height: constants.VIEW_HEIGHT,
             antialias: true
         });
-        
+
         document.body.appendChild(globals.app.view);
+
+        globals.blocksDisplayGroup = new PIXI.display.Group(100, true);
+        globals.ghostBlocksDisplayGroup = new PIXI.display.Group(50, true);
+
+        globals.app.stage = new PIXI.display.Stage();
+        globals.app.stage.group.enableSort = true;
+
+        globals.app.stage.addChild(new PIXI.display.Layer(globals.blocksDisplayGroup));
+        globals.app.stage.addChild(new PIXI.display.Layer(globals.ghostBlocksDisplayGroup));
     }
 
     function initPlayground() {

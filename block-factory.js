@@ -3,10 +3,10 @@ var blockFactory = (function () {
     const BORDER_WIDTH = 2;
     const BORDER_COLOR = 0x000000;
     
-    function createNew(startX, startY, color) {
+    function createNew(startX, startY, color, isGhost = false) {
         let graphics = new PIXI.Graphics(); 
 
-        initGraphics();
+        initGraphics(isGhost);
 
         let x = startX;
         let y = startY;
@@ -25,11 +25,12 @@ var blockFactory = (function () {
             moveTo(0, 0);
         }
 
-        function initGraphics() {
+        function initGraphics(isGhost) {
             graphics.lineStyle(BORDER_WIDTH, BORDER_COLOR, 1);
             graphics.beginFill(color);
             graphics.drawRect(0, 0, constants.BLOCK_SIZE, constants.BLOCK_SIZE);
 
+            graphics.parentGroup = isGhost ? globals.ghostBlocksDisplayGroup : globals.blocksDisplayGroup;
             globals.app.stage.addChild(graphics);
         }
         

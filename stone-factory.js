@@ -104,7 +104,7 @@ var stoneFactory = (function () {
 
         function createGhostBlocks() {
             ghostBlocks = blocks.map(block => {
-                return blockFactory.createNew(block.getCoords().x, block.getCoords().y, constants.GHOST_COLOR);
+                return blockFactory.createNew(block.getCoords().x, block.getCoords().y, constants.GHOST_COLOR, true);
             });
         }
 
