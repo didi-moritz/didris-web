@@ -117,7 +117,7 @@ var didris = (function() {
 
     function rotateOrFlipCurrentStoneIfPossible() {
         if (stone.isRotationOrFlipPossible(globals.x, globals.y)) {
-            stone.rotateOrFlip();
+            stone.rotateOrFlip(globals.x, globals.y);
         }
     }
 

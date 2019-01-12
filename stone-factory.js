@@ -7,6 +7,7 @@ var stoneFactory = (function () {
         let flip = true;
         let initalFlipDirection = true;
         let pivotClockwise = true;
+        let ghostBlocks = [];
 
         (function init() {
             let stoneType = stoneTypes.getType(type);
@@ -22,6 +23,8 @@ var stoneFactory = (function () {
                 flip = stoneType.flip;
                 pivotClockwise = stoneType.pivotDirection === "CW";
             }
+
+            createGhostBlocks();
         })();
 
         function convertTypeBlock(block) {
@@ -30,6 +33,7 @@ var stoneFactory = (function () {
 
         function moveTo(offsetX, offsetY) {
             blocks.forEach(block => block.moveTo(offsetX, offsetY));
+            updateGhostStones(offsetX, offsetY);
         }
 
         function isMoveToPossible(x, y) {
@@ -48,7 +52,7 @@ var stoneFactory = (function () {
             }
         }
 
-        function rotateOrFlip() {
+        function rotateOrFlip(x, y) {
             if (isNextRotationClockwise()) {
                 rotateClockwise();
             } else {
@@ -58,6 +62,8 @@ var stoneFactory = (function () {
             if (flip) {
                 initalFlipDirection = !initalFlipDirection;
             }
+
+            updateGhostStones(x, y);
         }
 
         function isNextRotationClockwise() {
@@ -70,13 +76,13 @@ var stoneFactory = (function () {
         }
 
         function rotateClockwise() {
-            blocks.forEach(block => {
+            [...blocks, ...ghostBlocks].forEach(block => {
                 block.rotateClockwise(pivotBlock.getCoords());
             });
         }
 
         function rotateCounterClockwise() {
-            blocks.forEach(block => {
+            [...blocks, ...ghostBlocks].forEach(block => {
                 block.rotateCounterClockwise(pivotBlock.getCoords());
             });
         }
@@ -93,6 +99,26 @@ var stoneFactory = (function () {
 
         function updateBlocksOfPlayground(x, y) {
             blocks.forEach(block => block.updateBlocksOfPlayground(x, y));
+            destroyGhostBlocks();
+        }
+
+        function createGhostBlocks() {
+            ghostBlocks = blocks.map(block => {
+                return blockFactory.createNew(block.getCoords().x, block.getCoords().y, constants.GHOST_COLOR);
+            });
+        }
+
+        function destroyGhostBlocks() {
+            ghostBlocks.forEach(ghostBlock => ghostBlock.removeAndDelete());
+        }
+
+        function updateGhostStones(x, y) {
+            let maxY = y;
+            while (isMoveToPossible(x, maxY + 1)) {
+                maxY++;
+            }
+
+            ghostBlocks.forEach(ghostBlock => ghostBlock.moveTo(x, maxY));
         }
 
         return {
