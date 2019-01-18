@@ -1,6 +1,6 @@
 /* exported stoneFactory */
 var stoneFactory = (function () {
-    function createNew(type) {
+    function createNew(type, isNextStone = false) {
         let color;
         let blocks = [];
         let pivotBlock = null;
@@ -14,9 +14,14 @@ var stoneFactory = (function () {
             if (!stoneType) {
                 stoneType = stoneTypes.getRandomType();
             }
+            
+            if (!isNextStone) {
+                // eslint-disable-next-line no-console
+                console.log(stoneType.name);
+            }
 
             color = stoneType.color;
-            stoneType.blocks.forEach(convertTypeBlock);
+            stoneType.blocks.forEach(block => convertTypeBlock(block, isNextStone));
 
             if (stoneType.pivotBlockNumber !== null) {
                 pivotBlock = blocks[stoneType.pivotBlockNumber];
@@ -24,11 +29,14 @@ var stoneFactory = (function () {
                 pivotClockwise = stoneType.pivotDirection === "CW";
             }
 
-            createGhostBlocks();
+            if (!isNextStone) {
+                createGhostBlocks();
+            }
         })();
 
-        function convertTypeBlock(block) {
-            blocks.push(blockFactory.createNew(block.x, block.y, color));
+        function convertTypeBlock(block, isNextStone) {
+            blocks.push(blockFactory.createNew(block.x, block.y, color,
+                isNextStone && constants.BLOCK_TYPE_NEXT));
         }
 
         function moveTo(offsetX, offsetY) {
@@ -104,7 +112,7 @@ var stoneFactory = (function () {
 
         function createGhostBlocks() {
             ghostBlocks = blocks.map(block => {
-                return blockFactory.createNew(block.getCoords().x, block.getCoords().y, constants.GHOST_COLOR, true);
+                return blockFactory.createNew(block.getCoords().x, block.getCoords().y, constants.GHOST_COLOR, constants.BLOCK_TYPE_GHOST);
             });
         }
 
@@ -112,7 +120,15 @@ var stoneFactory = (function () {
             ghostBlocks.forEach(ghostBlock => ghostBlock.removeAndDelete());
         }
 
+        function destroyBlocks() {
+            blocks.forEach(block => block.removeAndDelete());
+        }
+
         function updateGhostStones(x, y) {
+            if (!ghostBlocks) {
+                return;
+            }
+
             let maxY = y;
             while (isMoveToPossible(x, maxY + 1)) {
                 maxY++;
@@ -126,7 +142,8 @@ var stoneFactory = (function () {
             moveTo,
             isRotationOrFlipPossible,
             rotateOrFlip,
-            updateBlocksOfPlayground
+            updateBlocksOfPlayground,
+            destroyBlocks
         };
     }
 

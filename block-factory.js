@@ -2,28 +2,39 @@
 var blockFactory = (function () {
     const BORDER_WIDTH = 2;
     const BORDER_COLOR = 0x000000;
-    
-    function createNew(startX, startY, color, isGhost = false) {
-        let graphics = new PIXI.Graphics(); 
+
+    function createNew(startX, startY, color, type = constants.BLOCK_TYPE_NORMAL) {
+        let graphics = new PIXI.Graphics();
 
         let x = startX;
         let y = startY;
 
         function getCoords() {
-            return {x, y};
+            return { x, y };
         }
-        
-        initGraphics(isGhost);
 
-        function initGraphics(isGhost) {
+        initGraphics(type);
+
+        function initGraphics(type) {
             graphics.lineStyle(BORDER_WIDTH, BORDER_COLOR, 1);
             graphics.beginFill(color);
             graphics.drawRect(0, 0, constants.BLOCK_SIZE, constants.BLOCK_SIZE);
 
-            const layer = isGhost ? globals.playgroundGhostBlocksLayer : globals.playgroundBlocksLayer;
+            let layer = null;
+            switch (type) {
+            case constants.BLOCK_TYPE_GHOST:
+                layer = globals.playgroundGhostBlocksLayer;
+                break;
+            case constants.BLOCK_TYPE_NEXT:
+                layer = globals.nextStoneLayer;
+                break;
+            default:
+                layer = globals.playgroundBlocksLayer;
+            }
+
             layer.addChild(graphics);
         }
-        
+
         function removeAndDelete() {
             globals.app.stage.removeChild(graphics);
             graphics.destroy();

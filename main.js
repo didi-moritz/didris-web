@@ -2,6 +2,9 @@
 var didris = (function() {
 
     let stone = null;
+    let nextStone = null;
+    let nextStoneTypeName = null;
+
     let stoneDrop = 0;
     let scoreText = null;
 
@@ -21,6 +24,7 @@ var didris = (function() {
         initStoneLayers();
         initControls();
         initScoreText();
+        initNextStoneText();
         engine.start();
     }
 
@@ -40,15 +44,21 @@ var didris = (function() {
     function initStoneLayers() {
         const blocksDisplayGroup = new PIXI.display.Group(100, true);
         const ghostBlocksDisplayGroup = new PIXI.display.Group(50, true);
+        const generalDisplayGroup = new PIXI.display.Group(60, true);
 
         globals.playgroundBlocksLayer = new PIXI.display.Layer(blocksDisplayGroup);
         globals.playgroundGhostBlocksLayer = new PIXI.display.Layer(ghostBlocksDisplayGroup);
+        globals.nextStoneLayer = new PIXI.display.Layer(generalDisplayGroup);
 
         globals.playgroundBlocksLayer.x = globals.playgroundGhostBlocksLayer.x = playground.getLeft();
         globals.playgroundBlocksLayer.y = globals.playgroundGhostBlocksLayer.y = playground.getTop();
+        
+        globals.nextStoneLayer.x = constants.NEXT_STONE_OFFSET_X;
+        globals.nextStoneLayer.y = constants.NEXT_STONE_OFFSET_Y;
 
         globals.app.stage.addChild(globals.playgroundBlocksLayer);
         globals.app.stage.addChild(globals.playgroundGhostBlocksLayer);
+        globals.app.stage.addChild(globals.nextStoneLayer);
     }
 
     function initPlayground() {
@@ -56,10 +66,17 @@ var didris = (function() {
     }
 
     function initScoreText() {
-        scoreText = new PIXI.Text("Score: 0", constants.scoreFontStyle);
-        scoreText.x = 20;
-        scoreText.y = 20;
+        scoreText = new PIXI.Text("Score: 0", constants.FONT_STYLE);
+        scoreText.x = constants.SCORE_TEXT_OFFSET_X;
+        scoreText.y = constants.SCORE_TEXT_OFFSET_Y;
         globals.app.stage.addChild(scoreText);
+    }
+
+    function initNextStoneText() {
+        const nextStoneText = new PIXI.Text("Next:", constants.FONT_STYLE);
+        nextStoneText.x = constants.NEXT_STONE_TEXT_OFFSET_X;
+        nextStoneText.y = constants.NEXT_STONE_TEXT_OFFSET_Y;
+        globals.app.stage.addChild(nextStoneText);
     }
 
     function initControls() {
@@ -96,10 +113,15 @@ var didris = (function() {
     }
 
     function haveNewStone() {
-        stone = stoneFactory.createNew();
+        stone = stoneFactory.createNew(nextStoneTypeName);
         resetStoneDrop();
         resetCurrentPosition();
         updateStone();
+        
+        destroyNextStone();
+        nextStoneTypeName = stoneTypes.getRandomTypeName();
+        nextStone = stoneFactory.createNew(nextStoneTypeName, true);
+        updateNextStone();
     }
     
     function resetCurrentPosition() {
@@ -123,6 +145,16 @@ var didris = (function() {
 
     function updateStone() {
         stone.moveTo(globals.x, globals.y);
+    }
+
+    function destroyNextStone() {
+        if (nextStone) {
+            nextStone.destroyBlocks();
+        }
+    }
+
+    function updateNextStone() {
+        nextStone.moveTo(0, 0);
     }
 
     function moveCurrentStoneIfPossible(x, y) {

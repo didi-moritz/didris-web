@@ -9,6 +9,15 @@ var constants = {
     PLAYGROUND_BORDER_WIDTH: 2,
     PLAYGROUND_BORDER_COLOR: 0x0088FF,
     GHOST_COLOR: 0x555B66,
+    BLOCK_TYPE_NORMAL: 0,
+    BLOCK_TYPE_GHOST: 1,
+    BLOCK_TYPE_NEXT: 2,
+    SCORE_TEXT_OFFSET_X: 50,
+    SCORE_TEXT_OFFSET_Y: 30,
+    NEXT_STONE_OFFSET_X: 150,
+    NEXT_STONE_OFFSET_Y: 100,
+    NEXT_STONE_TEXT_OFFSET_X: 50,
+    NEXT_STONE_TEXT_OFFSET_Y: 95,
     KEY_UP: 38,
     KEY_DOWN: 40,
     KEY_LEFT: 37,
@@ -19,7 +28,7 @@ var constants = {
         3: 300,
         4: 1200
     },
-    scoreFontStyle: new PIXI.TextStyle({
+    FONT_STYLE: new PIXI.TextStyle({
         fontFamily: "monospace",
         fontSize: 24,
         fontWeight: "bold",

@@ -16,10 +16,13 @@ var stoneTypes = (function() {
         return types[name];
     }
 
-    function getRandomType() {
+    function getRandomTypeName() {
         let keys = Object.keys(types);
-        let key = keys[Math.floor(Math.random() * keys.length)];
-        return getType(key);
+        return keys[Math.floor(Math.random() * keys.length)];
+    }
+
+    function getRandomType() {
+        return getType(getRandomTypeName());
     }
 
     function readData() {
@@ -91,6 +94,7 @@ var stoneTypes = (function() {
 
     return {
         getType,
-        getRandomType
+        getRandomType,
+        getRandomTypeName
     };
 })();
