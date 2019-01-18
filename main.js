@@ -18,6 +18,7 @@ var didris = (function() {
     function init() {
         initView();
         initPlayground();
+        initStoneLayers();
         initControls();
         initScoreText();
         engine.start();
@@ -32,14 +33,22 @@ var didris = (function() {
 
         document.body.appendChild(globals.app.view);
 
-        globals.blocksDisplayGroup = new PIXI.display.Group(100, true);
-        globals.ghostBlocksDisplayGroup = new PIXI.display.Group(50, true);
-
         globals.app.stage = new PIXI.display.Stage();
         globals.app.stage.group.enableSort = true;
+    }
 
-        globals.app.stage.addChild(new PIXI.display.Layer(globals.blocksDisplayGroup));
-        globals.app.stage.addChild(new PIXI.display.Layer(globals.ghostBlocksDisplayGroup));
+    function initStoneLayers() {
+        const blocksDisplayGroup = new PIXI.display.Group(100, true);
+        const ghostBlocksDisplayGroup = new PIXI.display.Group(50, true);
+
+        globals.playgroundBlocksLayer = new PIXI.display.Layer(blocksDisplayGroup);
+        globals.playgroundGhostBlocksLayer = new PIXI.display.Layer(ghostBlocksDisplayGroup);
+
+        globals.playgroundBlocksLayer.x = globals.playgroundGhostBlocksLayer.x = playground.getLeft();
+        globals.playgroundBlocksLayer.y = globals.playgroundGhostBlocksLayer.y = playground.getTop();
+
+        globals.app.stage.addChild(globals.playgroundBlocksLayer);
+        globals.app.stage.addChild(globals.playgroundGhostBlocksLayer);
     }
 
     function initPlayground() {

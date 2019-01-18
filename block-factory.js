@@ -6,13 +6,28 @@ var blockFactory = (function () {
     function createNew(startX, startY, color, isGhost = false) {
         let graphics = new PIXI.Graphics(); 
 
-        initGraphics(isGhost);
-
         let x = startX;
         let y = startY;
 
         function getCoords() {
             return {x, y};
+        }
+        
+        initGraphics(isGhost);
+
+        function initGraphics(isGhost) {
+            graphics.lineStyle(BORDER_WIDTH, BORDER_COLOR, 1);
+            graphics.beginFill(color);
+            graphics.drawRect(0, 0, constants.BLOCK_SIZE, constants.BLOCK_SIZE);
+
+            const layer = isGhost ? globals.playgroundGhostBlocksLayer : globals.playgroundBlocksLayer;
+            layer.addChild(graphics);
+        }
+        
+        function removeAndDelete() {
+            globals.app.stage.removeChild(graphics);
+            graphics.destroy();
+            graphics = undefined;
         }
 
         function moveTo(offsetX, offsetY) {
@@ -25,27 +40,12 @@ var blockFactory = (function () {
             moveTo(0, 0);
         }
 
-        function initGraphics(isGhost) {
-            graphics.lineStyle(BORDER_WIDTH, BORDER_COLOR, 1);
-            graphics.beginFill(color);
-            graphics.drawRect(0, 0, constants.BLOCK_SIZE, constants.BLOCK_SIZE);
-
-            graphics.parentGroup = isGhost ? globals.ghostBlocksDisplayGroup : globals.blocksDisplayGroup;
-            globals.app.stage.addChild(graphics);
-        }
-        
-        function removeAndDelete() {
-            globals.app.stage.removeChild(graphics);
-            graphics.destroy();
-            graphics = undefined;
-        }
-
         function calculateLeft(offsetX) {
-            return playground.getLeft() + (x + offsetX) * constants.BLOCK_SIZE;
+            return (x + offsetX) * constants.BLOCK_SIZE;
         }
 
         function calculateTop(offsetY) {
-            return playground.getTop() + (y + offsetY) * constants.BLOCK_SIZE;
+            return (y + offsetY) * constants.BLOCK_SIZE;
         }
 
         function isMoveToPossible(offsetX, offsetY) {
