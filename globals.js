@@ -3,7 +3,7 @@ var globals = {
     app: null,
     playgroundBlocksLayer: null,
     playgroundGhostBlocksLayer: null,
-    nextBlockLayer: null,
+    nextStoneLayer: null,
     x: 0,
     y: 0,
     level: 0,
