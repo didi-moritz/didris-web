@@ -3,10 +3,12 @@ var didris = (function() {
 
     let stone = null;
     let nextStone = null;
-    let nextStoneTypeName = null;
+    let switchStone = null;
 
     let stoneDrop = 0;
     let scoreText = null;
+
+    let switchPossible = true;
 
     function start() {
         // eslint-disable-next-line no-console
@@ -25,6 +27,7 @@ var didris = (function() {
         initControls();
         initScoreText();
         initNextStoneText();
+        initSwitchStoneText();
         engine.start();
     }
 
@@ -49,16 +52,21 @@ var didris = (function() {
         globals.playgroundBlocksLayer = new PIXI.display.Layer(blocksDisplayGroup);
         globals.playgroundGhostBlocksLayer = new PIXI.display.Layer(ghostBlocksDisplayGroup);
         globals.nextStoneLayer = new PIXI.display.Layer(generalDisplayGroup);
+        globals.switchStoneLayer = new PIXI.display.Layer(generalDisplayGroup);
 
         globals.playgroundBlocksLayer.x = globals.playgroundGhostBlocksLayer.x = playground.getLeft();
         globals.playgroundBlocksLayer.y = globals.playgroundGhostBlocksLayer.y = playground.getTop();
         
         globals.nextStoneLayer.x = constants.NEXT_STONE_OFFSET_X;
         globals.nextStoneLayer.y = constants.NEXT_STONE_OFFSET_Y;
+        
+        globals.switchStoneLayer.x = constants.SWITCH_STONE_OFFSET_X;
+        globals.switchStoneLayer.y = constants.SWITCH_STONE_OFFSET_Y;
 
         globals.app.stage.addChild(globals.playgroundBlocksLayer);
         globals.app.stage.addChild(globals.playgroundGhostBlocksLayer);
         globals.app.stage.addChild(globals.nextStoneLayer);
+        globals.app.stage.addChild(globals.switchStoneLayer);
     }
 
     function initPlayground() {
@@ -77,6 +85,13 @@ var didris = (function() {
         nextStoneText.x = constants.NEXT_STONE_TEXT_OFFSET_X;
         nextStoneText.y = constants.NEXT_STONE_TEXT_OFFSET_Y;
         globals.app.stage.addChild(nextStoneText);
+    }
+
+    function initSwitchStoneText() {
+        const switchStoneText = new PIXI.Text("Save:", constants.FONT_STYLE);
+        switchStoneText.x = constants.SWITCH_STONE_TEXT_OFFSET_X;
+        switchStoneText.y = constants.SWITCH_STONE_TEXT_OFFSET_Y;
+        globals.app.stage.addChild(switchStoneText);
     }
 
     function initControls() {
@@ -104,6 +119,9 @@ var didris = (function() {
         case 32:
             engine.fallDown();
             break;
+        case 13:
+            switchStonesIfPossible();
+            break;
         default:
             // eslint-disable-next-line no-console
             console.log(`keycode: ${event.keyCode}`);
@@ -113,17 +131,51 @@ var didris = (function() {
     }
 
     function haveNewStone() {
-        stone = stoneFactory.createNew(nextStoneTypeName);
+        switchPossible = true;
+        createAndUpdateNewStone(nextStone && nextStone.getTypeName());
+        createAndUpdateNextStone();
+    }
+
+    function switchStones() {
+        switchPossible = false;
+
+        let currentStoneTypeName = stone.getTypeName();
+        destroyCurrentStone();
+
+        if (switchStone) {
+            createAndUpdateNewStone(switchStone.getTypeName());
+        } else {
+            createAndUpdateNewStone(nextStone.getTypeName());
+            createAndUpdateNextStone();
+        }
+
+        createAndUpdateSwitchStone(currentStoneTypeName);
+    }
+
+    function createAndUpdateNewStone(typeName) {
+        stone = stoneFactory.createNew(typeName);
         resetStoneDrop();
         resetCurrentPosition();
         updateStone();
-        
+    }
+
+    function createAndUpdateSwitchStone(typeName) {
+        destroySwitchStone();
+        switchStone = stoneFactory.createNew(typeName, constants.BLOCK_TYPE_SWITCH);
+        updateSwitchStone();
+    }
+
+    function createAndUpdateNextStone() {
         destroyNextStone();
-        nextStoneTypeName = stoneTypes.getRandomTypeName();
-        nextStone = stoneFactory.createNew(nextStoneTypeName, true);
+        nextStone = stoneFactory.createNew(stoneTypes.getRandomTypeName(), constants.BLOCK_TYPE_NEXT);
         updateNextStone();
     }
-    
+
+    function destroyCurrentStone() {
+        stone.destroyBlocks();
+        stone.destroyGhostBlocks();
+    }
+
     function resetCurrentPosition() {
         globals.x = Math.floor((constants.PLAYGROUND_WIDTH - 1) / 2) - 1;
         globals.y = 0;
@@ -153,8 +205,18 @@ var didris = (function() {
         }
     }
 
+    function destroySwitchStone() {
+        if (switchStone) {
+            switchStone.destroyBlocks();
+        }
+    }
+
     function updateNextStone() {
         nextStone.moveTo(0, 0);
+    }
+
+    function updateSwitchStone() {
+        switchStone.moveTo(0, 0);
     }
 
     function moveCurrentStoneIfPossible(x, y) {
@@ -210,6 +272,12 @@ var didris = (function() {
 
     function updateScore() {
         scoreText.text = "Score: " + globals.points;
+    }
+
+    function switchStonesIfPossible() {
+        if (switchPossible) {
+            switchStones();
+        }
     }
 
     return {

@@ -28,6 +28,9 @@ var blockFactory = (function () {
             case constants.BLOCK_TYPE_NEXT:
                 layer = globals.nextStoneLayer;
                 break;
+            case constants.BLOCK_TYPE_SWITCH:
+                layer = globals.switchStoneLayer;
+                break;
             default:
                 layer = globals.playgroundBlocksLayer;
             }

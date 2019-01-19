@@ -1,6 +1,6 @@
 /* exported stoneFactory */
 var stoneFactory = (function () {
-    function createNew(type, isNextStone = false) {
+    function createNew(type, blockType = constants.BLOCK_TYPE_NORMAL) {
         let color;
         let blocks = [];
         let pivotBlock = null;
@@ -8,20 +8,25 @@ var stoneFactory = (function () {
         let initalFlipDirection = true;
         let pivotClockwise = true;
         let ghostBlocks = [];
+        let typeName = null;
 
         (function init() {
+            const withGhostBlocks = blockType === constants.BLOCK_TYPE_NORMAL;
+
             let stoneType = stoneTypes.getType(type);
             if (!stoneType) {
                 stoneType = stoneTypes.getRandomType();
             }
             
-            if (!isNextStone) {
+            typeName = stoneType.name;
+
+            if (withGhostBlocks) {
                 // eslint-disable-next-line no-console
-                console.log(stoneType.name);
+                console.log(typeName);
             }
 
             color = stoneType.color;
-            stoneType.blocks.forEach(block => convertTypeBlock(block, isNextStone));
+            stoneType.blocks.forEach(block => convertTypeBlock(block, blockType));
 
             if (stoneType.pivotBlockNumber !== null) {
                 pivotBlock = blocks[stoneType.pivotBlockNumber];
@@ -29,14 +34,17 @@ var stoneFactory = (function () {
                 pivotClockwise = stoneType.pivotDirection === "CW";
             }
 
-            if (!isNextStone) {
+            if (withGhostBlocks) {
                 createGhostBlocks();
             }
         })();
 
-        function convertTypeBlock(block, isNextStone) {
-            blocks.push(blockFactory.createNew(block.x, block.y, color,
-                isNextStone && constants.BLOCK_TYPE_NEXT));
+        function getTypeName() {
+            return typeName;
+        }
+
+        function convertTypeBlock(block, blockType) {
+            blocks.push(blockFactory.createNew(block.x, block.y, color, blockType));
         }
 
         function moveTo(offsetX, offsetY) {
@@ -143,7 +151,9 @@ var stoneFactory = (function () {
             isRotationOrFlipPossible,
             rotateOrFlip,
             updateBlocksOfPlayground,
-            destroyBlocks
+            destroyBlocks,
+            destroyGhostBlocks,
+            getTypeName
         };
     }
 

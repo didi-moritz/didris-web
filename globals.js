@@ -4,6 +4,7 @@ var globals = {
     playgroundBlocksLayer: null,
     playgroundGhostBlocksLayer: null,
     nextStoneLayer: null,
+    switchStoneLayer: null,
     x: 0,
     y: 0,
     level: 0,
