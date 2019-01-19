@@ -47,12 +47,13 @@ var didris = (function() {
     function initStoneLayers() {
         const blocksDisplayGroup = new PIXI.display.Group(100, true);
         const ghostBlocksDisplayGroup = new PIXI.display.Group(50, true);
-        const generalDisplayGroup = new PIXI.display.Group(60, true);
+        const nextStoneDisplayGroup = new PIXI.display.Group(60, true);
+        const switchStoneDisplayGroup = new PIXI.display.Group(60, true);
 
         globals.playgroundBlocksLayer = new PIXI.display.Layer(blocksDisplayGroup);
         globals.playgroundGhostBlocksLayer = new PIXI.display.Layer(ghostBlocksDisplayGroup);
-        globals.nextStoneLayer = new PIXI.display.Layer(generalDisplayGroup);
-        globals.switchStoneLayer = new PIXI.display.Layer(generalDisplayGroup);
+        globals.nextStoneLayer = new PIXI.display.Layer(nextStoneDisplayGroup);
+        globals.switchStoneLayer = new PIXI.display.Layer(switchStoneDisplayGroup);
 
         globals.playgroundBlocksLayer.x = globals.playgroundGhostBlocksLayer.x = playground.getLeft();
         globals.playgroundBlocksLayer.y = globals.playgroundGhostBlocksLayer.y = playground.getTop();
